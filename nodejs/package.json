@@ -1,0 +1,29 @@
+{
+  "name": "@future-code-lab/karatsuba",
+  "version": "0.0.1",
+  "description": "The Karatsuba algorithm is a fast multiplication algorithm.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/future-code-lab/Karatsuba.git"
+  },
+  "keywords": [
+    "Karatsuba",
+    "multiplication-algorithm",
+    "nodejs",
+    "TypeScript"
+  ],
+  "author": {
+    "name": "Marat Zimnurov",
+    "email": "zimtir@mail.ru",
+    "url": "https://github.com/Zimtir"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/future-code-lab/Karatsuba/issues"
+  },
+  "homepage": "https://github.com/future-code-lab/Karatsuba#readme"
+}
