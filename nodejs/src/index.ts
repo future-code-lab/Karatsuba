@@ -1,1 +1,5 @@
-console.log('Hello world!')
+import { getFastMultiplication } from './utils/multiplication'
+
+export default {
+  getFastMultiplication
+}
