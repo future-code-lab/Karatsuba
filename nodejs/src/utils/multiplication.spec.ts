@@ -133,24 +133,4 @@ describe('multiplication', () => {
     // Assert
     expect(expected).equal(actual)
   })
-
-  it(
-    'speed of tin multiplication (2 digits)',
-    getSpeedMultiplication('10', '30', 2, 2)
-  )
-
-  it(
-    'speed of small multiplication (4 digits)',
-    getSpeedMultiplication('1000', '3000', 4, 20)
-  )
-
-  it(
-    'speed of medium multiplication (8 digits)',
-    getSpeedMultiplication('11188833', '66655544', 8, 20000)
-  )
-
-  it(
-    'speed of large multiplication (12 digits)',
-    getSpeedMultiplication('111122223333', '999988887777', 12, 200000)
-  )
 })
