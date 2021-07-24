@@ -1,9 +1,15 @@
-import { MultiplicationSignature } from './multiplication.types'
+import {
+  Multiplications,
+  MultiplicationSignature,
+  NumberPairs
+} from './multiplication.types'
 import {
   isFastMultiplicative,
   getNumberPairs,
   getPairSum,
-  calculateSimpleMultiplication
+  calculateSimpleMultiplication,
+  getSignedValue,
+  removePairSign
 } from './multiplication.utils'
 
 // It should be O(N^2)
@@ -36,11 +42,32 @@ export const computeMultiplication: MultiplicationSignature<string> = (
     }
   }
 
-  return stack.reverse().join('')
+  const answer = stack.reverse().join('')
+
+  // Write a sign
+  return getSignedValue(left, right, answer)
 }
 
-// TODO: Add validation for: negative x positive
-// TODO: Add validation for: positive x negative
+export const getMultiplication = (
+  multiplication: Multiplications,
+  n: number,
+  pair: NumberPairs
+): string => {
+  const { left, right } = removePairSign(pair)
+
+  const sign = (answer: string) => getSignedValue(pair.left, pair.right, answer)
+
+  switch (multiplication) {
+    case Multiplications.FAST:
+      return sign(getFastMultiplication(n)(left, right))
+
+    case Multiplications.SIMPLE:
+    default:
+      return sign(computeMultiplication(left, right))
+  }
+}
+
+// It should be O(N^~1.59..)
 export const getFastMultiplication = (
   n: number
 ): MultiplicationSignature<string> => {
