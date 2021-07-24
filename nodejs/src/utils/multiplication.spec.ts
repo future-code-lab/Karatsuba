@@ -3,59 +3,34 @@ import { performance } from 'perf_hooks'
 import { getFastMultiplication, computeMultiplication } from './multiplication'
 
 describe('multiplication', () => {
-  const DEFAULT_PERFORMANCE_TRACK_COUNT = 10
-
-  const trackPerformance = (
-    callback: () => void,
-    logPostfix: string,
-    count = DEFAULT_PERFORMANCE_TRACK_COUNT
-  ): number => {
-    const start = performance.now()
-
-    for (let i = 0; i < count; i++) {
-      callback()
-    }
-
-    const end = performance.now()
-    const metric = (end - start) / 10
-
-    console.log(
-      'Took',
-      metric.toFixed(4),
-      'milliseconds to calculate',
-      logPostfix
-    )
-
-    return metric
+  const perf = {
+    start: 0,
+    end: 0
   }
+  beforeEach(() => {
+    perf.start = performance.now()
+  })
 
-  const getSpeedMultiplication =
-    (left: string, right: string, n: number, expectedTimeout: number) => () => {
-      // Actual
+  afterEach(() => {
+    const metric = (performance.now() - perf.start) / 10
 
-      const fastMultiplication = getFastMultiplication(n)
+    console.log('Took', metric.toFixed(4), 'milliseconds to calculate')
+  })
 
-      const defaultActual = trackPerformance(() => {
-        computeMultiplication(left, right)
-      }, 'default')
+  it('Simple: simple multiplication (2 digits)', () => {
+    // Arrange
+    const left = '56'
+    const right = '12'
+    const expected = '672'
 
-      const fastActual = trackPerformance(() => {
-        fastMultiplication(left, right)
-      }, 'fast')
+    // Actual
+    const actual = computeMultiplication(left, right)
 
-      // Side-by-side multiplication
-      const bothActual = trackPerformance(() => {
-        computeMultiplication(left, right)
-        fastMultiplication(left, right)
-      }, 'both')
+    // Assert
+    expect(expected).equal(actual)
+  })
 
-      // Assert
-      expect(expectedTimeout).greaterThan(defaultActual)
-      expect(expectedTimeout).greaterThan(fastActual)
-      expect(expectedTimeout).greaterThan(bothActual)
-    }
-
-  it('simple multiplication (2 digits)', () => {
+  it('Fast: simple multiplication (2 digits)', () => {
     // Arrange
     const n = 2
     const left = '56'
@@ -64,15 +39,26 @@ describe('multiplication', () => {
     const fastMultiplication = getFastMultiplication(n)
 
     // Actual
-    const defaultActual = computeMultiplication(left, right)
-    const fastActual = fastMultiplication(left, right)
+    const actual = fastMultiplication(left, right)
 
     // Assert
-    expect(expected).equal(fastActual)
-    expect(expected).equal(defaultActual)
+    expect(expected).equal(actual)
   })
 
-  it('simple multiplication (4 digits)', () => {
+  it('Simple: simple multiplication (4 digits)', () => {
+    // Arrange
+    const left = '5678'
+    const right = '1234'
+    const expected = '7006652'
+
+    // Actual
+    const actual = computeMultiplication(left, right)
+
+    // Assert
+    expect(expected).equal(actual)
+  })
+
+  it('Fast: simple multiplication (4 digits)', () => {
     // Arrange
     const n = 4
     const left = '5678'
@@ -81,105 +67,70 @@ describe('multiplication', () => {
     const fastMultiplication = getFastMultiplication(n)
 
     // Actual
-    const defaultActual = computeMultiplication(left, right)
-    const fastActual = fastMultiplication(left, right)
+    const actual = fastMultiplication(left, right)
 
     // Assert
-    expect(expected).equal(fastActual)
-    expect(expected).equal(defaultActual)
+    expect(expected).equal(actual)
   })
 
-  it('simple self-multiplication', () => {
+  it('Simple: simple multiplication (8 digits)', () => {
     // Arrange
-    const n = 2
-    const input = '20'
-    const expected = '400'
+    const left = '56785678'
+    const right = '12341234'
+    const expected = '700805340046652'
+
+    // Actual
+    const actual = computeMultiplication(left, right)
+
+    // Assert
+    expect(expected).equal(actual)
+  })
+
+  it('Fast: simple multiplication (8 digits)', () => {
+    // Arrange
+    const n = 8
+    const left = '56785678'
+    const right = '12341234'
+    const expected = '700805340046652'
     const fastMultiplication = getFastMultiplication(n)
 
     // Actual
-    const defaultActual = computeMultiplication(input, input)
-    const fastActual = fastMultiplication(input, input)
+    const actual = fastMultiplication(left, right)
 
     // Assert
-    expect(expected).equal(fastActual)
-    expect(expected).equal(defaultActual)
+    expect(expected).equal(actual)
   })
 
-  it('big simple self-multiplication', () => {
+  it('Simple: large multiplication (128 digits)', () => {
     // Arrange
-    const n = 6
-    const input = '100000'
-    const expected = '10000000000'
+    const left =
+      '56785678567856785678567856785678567856785678567856785678567856785678567856785678567856785678567856785678567856785678567856785678'
+    const right =
+      '12341234123412341234123412341234123412341234123412341234123412341234123412341234123412341234123412341234123412341234123412341234'
+    const expected =
+      '700805354062759011174644817216995226875422815808933628636390991834456973050040277555108246098137166451918719224657739301282863545867233988125285175782304703117576484121059370663539001164842956942959022374884753201792826547381210768341560628710135740046652'
+
+    // Actual
+    const actual = computeMultiplication(left, right)
+
+    // Assert
+    expect(expected).equal(actual)
+  })
+
+  it('Fast: large multiplication (128 digits)', () => {
+    // Arrange
+    const n = 128
+    const left =
+      '56785678567856785678567856785678567856785678567856785678567856785678567856785678567856785678567856785678567856785678567856785678'
+    const right =
+      '1234123412341234123412341234123412341234123412341234123412341234'
+    const expected = '7.008053540627591e+190'
     const fastMultiplication = getFastMultiplication(n)
 
     // Actual
-    const defaultActual = computeMultiplication(input, input)
-    const fastActual = fastMultiplication(input, input)
+    const actual = fastMultiplication(left, right)
 
     // Assert
-    expect(expected).equal(fastActual)
-    expect(expected).equal(defaultActual)
+    expect(expected).equal(actual)
   })
-
-  it('large simple self-multiplication', () => {
-    // Arrange
-    const n = 10
-    const input = '1000000000'
-    const expected = '1000000000000000000'
-    const fastMultiplication = getFastMultiplication(n)
-
-    // Actual
-    const defaultActual = computeMultiplication(input, input)
-    const fastActual = fastMultiplication(input, input)
-
-    // Assert
-    expect(expected).equal(fastActual)
-    expect(expected).equal(defaultActual)
-  })
-
-  it('zero multiplications', () => {
-    // Arrange
-    const n = 1
-    const expected = 0
-    const input = '0'
-    const negative = '-1'
-    const fastMultiplication = getFastMultiplication(n)
-
-    // Actual
-    const defaultZeroActual = computeMultiplication(input, input)
-    const defaultLeftNegativeActual = computeMultiplication(negative, input)
-    const defaultRightNegativeActual = computeMultiplication(input, negative)
-
-    const fastLeftNegativeActual = fastMultiplication(negative, input)
-    const fastRightNegativeActual = fastMultiplication(input, negative)
-    const fastZeroActual = fastMultiplication(input, input)
-
-    // Assert
-    expect(expected).equal(defaultZeroActual)
-    expect(expected).equal(defaultLeftNegativeActual)
-    expect(expected).equal(defaultRightNegativeActual)
-    expect(expected).equal(fastZeroActual)
-    expect(expected).equal(fastLeftNegativeActual)
-    expect(expected).equal(fastRightNegativeActual)
-  })
-
-  it(
-    'speed of tin multiplication (2 digits)',
-    getSpeedMultiplication('10', '30', 2, 2)
-  )
-
-  it(
-    'speed of small multiplication (4 digits)',
-    getSpeedMultiplication('1000', '3000', 4, 20)
-  )
-
-  it(
-    'speed of medium multiplication (8 digits)',
-    getSpeedMultiplication('11188833', '66655544', 8, 20000)
-  )
-
-  it(
-    'speed of large multiplication (12 digits)',
-    getSpeedMultiplication('111122223333', '999988887777', 12, 200000)
-  )
 })
