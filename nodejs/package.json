@@ -1,0 +1,97 @@
+{
+  "name": "@future-code-lab/karatsuba",
+  "version": "0.0.1",
+  "description": "The Karatsuba algorithm is a fast multiplication algorithm.",
+  "main": "index.js",
+  "scripts": {
+    "build": "rimraf ./build && rimraf ./coverage && tsc",
+    "depcheck": "npx depcheck",
+    "lint": "eslint . --ext .ts",
+    "lint-and-fix": "eslint . --ext .ts --fix",
+    "prettier-format": "prettier --config .prettierrc --write ./src/**",
+    "prettier-watch": "onchange 'src/**/*.ts' -- prettier --write {{changed}}",
+    "start": "npm run build && node build/index.js",
+    "start:dev": "nodemon",
+    "test": "npm run test:units",
+    "test:coverage:units": "nyc -r lcov npm run test:units",
+    "test:size": "size-limit",
+    "test:size:report": "size-limit --why",
+    "test:units": "mocha -r ts-node/register -r source-map-support/register -r @babel/register --recursive 'src/**/*.spec.ts' --exit",
+    "update:install": "npm update && npm install",
+    "update:pull": "npm outdated"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/future-code-lab/Karatsuba.git"
+  },
+  "nyc": {
+    "cache": false,
+    "extension": [
+      ".ts"
+    ],
+    "include": [
+      "src/**/*.ts"
+    ],
+    "exclude": [
+      "build",
+      "src/**/*.spec.ts"
+    ],
+    "all": true
+  },
+  "keywords": [
+    "Karatsuba",
+    "multiplication-algorithm",
+    "nodejs",
+    "TypeScript"
+  ],
+  "author": {
+    "name": "Marat Zimnurov",
+    "email": "zimtir@mail.ru",
+    "url": "https://github.com/Zimtir"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/future-code-lab/Karatsuba/issues"
+  },
+  "homepage": "https://github.com/future-code-lab/Karatsuba#readme",
+  "devDependencies": {
+    "@babel/cli": "^7.13.16",
+    "@babel/core": "^7.14.3",
+    "@babel/plugin-syntax-dynamic-import": "^7.0.0",
+    "@babel/plugin-transform-runtime": "^7.13.15",
+    "@babel/preset-env": "^7.14.5",
+    "@babel/register": "^7.13.16",
+    "@babel/runtime": "^7.14.0",
+    "@size-limit/preset-small-lib": "^5.0.1",
+    "@size-limit/time": "^5.0.1",
+    "@types/chai": "^4.2.21",
+    "@types/mocha": "^8.2.2",
+    "@types/node": "^16.3.1",
+    "@typescript-eslint/eslint-plugin": "^4.28.2",
+    "@typescript-eslint/parser": "^4.28.2",
+    "chai": "^4.3.4",
+    "eslint": "^7.30.0",
+    "mocha": "^8.4.0",
+    "nodemon": "^2.0.11",
+    "nyc": "^15.1.0",
+    "onchange": "^7.1.0",
+    "prettier": "^2.3.2",
+    "rimraf": "^3.0.2",
+    "size-limit": "^5.0.1",
+    "source-map-support": "^0.5.19",
+    "ts-node": "^10.1.0",
+    "typescript": "^4.3.5"
+  },
+  "size-limit": [
+    {
+      "path": "build/index.js",
+      "webpack": false,
+      "limit": "5 kB"
+    },
+    {
+      "path": "build/utils/multiplication.js",
+      "webpack": false,
+      "limit": "5 kB"
+    }
+  ]
+}

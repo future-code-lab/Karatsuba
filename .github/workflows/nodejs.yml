@@ -1,0 +1,47 @@
+name: Node.js
+on:
+  push:
+    branches:
+      - master
+
+  pull_request:
+    branches: ["**"]
+
+jobs:
+  build:
+    timeout-minutes: 10
+    name: Build
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./nodejs
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+      - name: Install packages
+        run: npm ci
+
+      - name: Lint
+        run: npm run prettier-format && npm run lint
+
+      - name: Build
+        if: ${{ github.ref == 'refs/heads/master' }}
+        run: npm run build
+
+      - name: Build & Analyze size of bundle
+        if: ${{ github.ref != 'refs/heads/master' }}
+        uses: andresz1/size-limit-action@v1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          skip_step: install
+          directory: ./nodejs
+
+      - name: Tests
+        run: npm run test:coverage:units
+
+      - name: Test coverage
+        if: ${{ github.ref != 'refs/heads/master' && github.actor != 'dependabot[bot]' && github.actor != 'dependabot-preview[bot]' }}
+        uses: romeovs/lcov-reporter-action@v0.2.16
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          lcov-file: ./nodejs/coverage/lcov.info
