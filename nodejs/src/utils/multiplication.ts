@@ -25,20 +25,27 @@ export const computeMultiplication: MultiplicationSignature<string> = (
   for (let i = 0; i < lefts.length; i++) {
     for (let j = 0; j < rights.length; j++) {
       const m = calculateSimpleMultiplication(lefts[i], rights[j])
-      stack[i + j] = stack[i + j] ? stack[i + j] + m : m
+      const nextIndex = i + j
+
+      if (stack[nextIndex]) {
+        stack[nextIndex] = stack[nextIndex] + m
+      } else {
+        stack[nextIndex] = m
+      }
     }
   }
 
   for (let i = 0; i < stack.length; i++) {
     const num = stack[i] % 10
     const move = Math.floor(stack[i] / 10)
+    const nextIndex = i + 1
 
     stack[i] = num
 
-    if (stack[i + 1]) {
-      stack[i + 1] += move
+    if (stack[nextIndex]) {
+      stack[nextIndex] += move
     } else if (move != 0) {
-      stack[i + 1] = move
+      stack[nextIndex] = move
     }
   }
 
