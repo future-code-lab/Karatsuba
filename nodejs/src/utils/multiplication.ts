@@ -42,10 +42,7 @@ export const computeMultiplication: MultiplicationSignature<string> = (
     }
   }
 
-  const answer = stack.reverse().join('')
-
-  // Write a sign
-  return getSignedValue(left, right, answer)
+  return stack.reverse().join('')
 }
 
 export const getMultiplication = (
