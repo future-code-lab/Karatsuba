@@ -4,3 +4,8 @@ export type NumberPairs = {
 }
 
 export type MultiplicationSignature<T> = (left: string, right: string) => T
+
+export enum Multiplications {
+  FAST,
+  SIMPLE
+}
